@@ -1,67 +1,118 @@
 ﻿1. Projenin Vizyonu ve Amacı
-Proje Adı: Car Rental System (Araç Kiralama Sistemi Backend Simülasyonu) Amaç: Karmaşık iş süreçlerini (Araç kiralama, ödeme alma, sözleşme yapma, stok takibi) spagetti kod (karman çorman kod) haline getirmeden, genişletilebilir ve bakımı kolay bir yapıda yönetmek. Yöntem: Yazılım mühendisliğinin temel taşları olan 9 farklı Tasarım Desenini (Design Pattern) tek bir senaryoda entegre ederek kullandık.
-________________
+"Merhaba, projemin adı Car Rental System. Bu bir araç kiralama sistemi backend simülasyonudur. Amacımız: Araç kiralama, ödeme ve stok takibi gibi karmaşık iş süreçlerini, spagetti koda dönüştürmeden yönetilebilir hale getirmektir. Yöntemimiz: Yazılım mühendisliğinin temel taşları olan 9 farklı Tasarım Desenini tek bir senaryoda entegre ederek kullandık."
 
 
 2. Kategori Bazlı Detaylı Anlatım
-Bu kısım sunumunun gövdesidir. Her deseni şu 3 soruyla açıklamalısın: Senaryo ne? Sorun ne? Biz nasıl çözdük?
 A. Creational Patterns (Yaratımsal Desenler)
-Nesnelerin nasıl oluşturulacağını yönettiğimiz yer.
-1. Singleton (Sınıf: SystemConfig)
-* Senaryo: Uygulamanın veritabanı ayarları veya konfigürasyon dosyaları.
-* Sorun: Her araç kiralama işleminde veritabanına yeni bir bağlantı nesnesi oluşturursak (örneğin günde 1000 kiralama), sunucu kaynakları tükenir ve sistem çöker.
-* Çözüm: SystemConfig sınıfını Singleton yaptık. Bu, uygulamanın yaşamı boyunca sadece 1 kez oluşturulur. Herkes aynı kapıdan içeri girer. Bellek tasarrufu sağlar.
-2. Factory Method (Sınıf: FleetHub)
-* Senaryo: Müşteriye araç tahsis etme.
-* Sorun: Kodun içinde new Mercedes(), new BMW() gibi doğrudan sınıf isimleri kullanırsak, yarın sisteme "Tesla" eklediğimizde ana kodu (Main class) değiştirmemiz gerekir. Bu "Sıkı Bağlılık" (Tight Coupling) yaratır.
-* Çözüm: Bir "Fabrika" (FleetHub) kurduk. Biz fabrikaya sadece "Luxury" diyoruz, o bize arka planda new Mercedes() üretip veriyor. Ana kodun hangi markanın üretildiğinden haberi bile olmuyor.
-3. Builder (Sınıf: RentalAgreement)
-* Senaryo: Kira sözleşmesi oluşturma.
-* Sorun: Bir sözleşmede müşteri adı, araç, gün sayısı, sigorta, ek şoför, bebek koltuğu vb. onlarca parametre olabilir. new Sozlesme("Ali", araba, 5, true, false, true...) gibi bir kod yazmak hataya çok açıktır ve okunamaz.
-* Çözüm: Builder deseni ile sözleşmeyi adım adım inşa ettik. Draft (Taslak) sınıfı üzerinden .addFullCoverage(), .setDays(5) diyerek okunaklı ve esnek bir üretim sağladık.
-________________
+Nesnelerin oluşturulma karmaşasını yönettiğimiz katman.
 
+1. Singleton (Sınıf: creational.SystemConfig)
+
+
+Senaryo: Uygulamanın veritabanı ayarları ve konfigürasyon dosyalarının yönetimi.
+
+
+Sorun: Her kiralama işleminde (örneğin günde 1000 işlem) veritabanına yeni bir bağlantı nesnesi oluşturursak sunucu kaynakları tükenir ve sistem çöker.
+
+Çözüm: SystemConfig sınıfını Singleton yaptık. Uygulama yaşamı boyunca sadece 1 kez oluşturulur ve herkes aynı kapıdan girerek bellek tasarrufu sağlar.
+
+2. Factory Method (Sınıf: creational.FleetHub)
+
+
+Senaryo: Müşteriye araç tahsis etme süreci.
+
+
+Sorun: Kodun içinde new Mercedes() gibi doğrudan sınıf isimleri kullanırsak, sisteme "Tesla" eklediğimizde ana kodu değiştirmemiz gerekir, bu da "Sıkı Bağlılık" yaratır.
+
+Çözüm: Bir Fabrika (FleetHub) kurduk. Biz fabrikaya sadece "Luxury" diyoruz, o arka planda new Mercedes() üretip veriyor; ana kodun markadan haberi olmuyor.
+
+3. Builder (Sınıf: RentalAgreement)
+
+
+Senaryo: Karmaşık kira sözleşmesi oluşturma.
+
+Sorun: Sözleşmede müşteri adı, araç, gün, sigorta gibi onlarca parametre vardır. new Sozlesme("Ali", ..., true) şeklinde kod yazmak hataya açıktır.
+
+Çözüm: Builder deseni ile sözleşmeyi adım adım inşa ettik. Draft sınıfı üzerinden .addFullCoverage() diyerek okunaklı bir üretim sağladık.
 
 B. Structural Patterns (Yapısal Desenler)
-Sınıfları birbirine bağlayıp daha büyük yapılar kurduğumuz yer.
-4. Decorator (Sınıf: FeatureAddon)
-* Senaryo: Araca ek özellik satma (GPS, Koltuk, Sunroof).
-* Sorun: Eğer miras alma (inheritance) kullansaydık; CarWithGPS, CarWithSeat, CarWithGPSAndSeat gibi yüzlerce kombinasyon sınıfı oluşturmamız gerekirdi. Bu "Sınıf Patlaması"na yol açar.
-* Çözüm: Decorator deseni ile nesneyi çalışma anında paketledik (Wrapper). Bir araba nesnesini alıp WithGPS içine koyuyoruz. Artık o hem araba hem de GPS özellikli bir nesne oluyor. Fiyatı da dinamik olarak üzerine ekleniyor.
-5. Adapter (Sınıf: PaymentGateway)
-* Senaryo: Ödeme alma.
-* Sorun: Şirketimiz modern bir sistem kullanıyor (processPayment) ama çalıştığımız bankanın sistemi çok eski (LegacyBankApi -> transferFunds). Metot isimleri ve yapıları uyuşmuyor.
-* Çözüm: Bankanın kodunu değiştiremeyeceğimiz için araya bir Adapter (PaymentGateway) yazdık. Bizim sistemimiz adaptöre komut gönderiyor, adaptör de bunu bankanın anlayacağı dile çeviriyor.
-6. Facade (Sınıf: BookingManager)
-* Senaryo: Kiralama işleminin başlatılması.
-* Sorun: Bir kiralama yapmak için; Sözleşme (Builder) oluşturmak, Ödeme (Adapter) almak, Stok düşmek gerekiyor. Arayüz geliştiricisi veya son kullanıcı bu karmaşık sırayı bilmek zorunda mı?
-* Çözüm: Hayır. Facade deseni ile BookingManager sınıfını oluşturduk. Dışarıya tek bir bookRide() metodu açtık. Bu metot, içeride tüm o karmaşık işleri (Builder, Adapter vb.) sırasıyla çalıştırıyor. "Tek tuşla yönetim" sağladık.
-________________
+Sınıfları birleştirip daha büyük yapılar kurduğumuz katman.
 
+4. Decorator (Sınıf: FeatureAddon)
+
+
+Senaryo: Araca GPS, Koltuk gibi ek özellik satma.
+
+
+Sorun: Miras alma kullansaydık CarWithGPS, CarWithSeat gibi yüzlerce kombinasyon sınıfı oluşturmamız gerekirdi, bu "Sınıf Patlaması"na yol açar.
+
+Çözüm: Decorator deseni ile nesneyi çalışma anında paketledik (Wrapper). Aracı WithGPS içine koyduğumuzda hem araç hem GPS özellikli oluyor ve fiyat dinamik ekleniyor.
+
+5. Adapter (Sınıf: PaymentGateway)
+
+
+Senaryo: Ödeme alma işlemi.
+
+
+Sorun: Şirketimiz modern bir metot (processPayment) kullanıyor ama bankanın sistemi eski (LegacyBankApi -> transferFunds) ve metot isimleri uyuşmuyor.
+
+Çözüm: Bankanın koduna dokunamadığımız için araya PaymentGateway adında bir Adapter yazdık. Bizim komutumuzu bankanın anlayacağı dile çeviriyor.
+
+6. Facade (Sınıf: BookingManager)
+
+
+Senaryo: Kiralama işleminin başlatılması.
+
+Sorun: Kiralama yapmak için Sözleşme (Builder), Ödeme (Adapter) ve Stok işlemlerini sırayla çağırmak gerekiyor. Arayüz geliştiricisi bu sırayı bilmek zorunda değil.
+
+Çözüm: BookingManager ile bir Facade (Ön Yüz) oluşturduk. Dışarıya tek bir bookRide() metodu açarak tüm karmaşık işleri içeride yönettik ("Tek tuşla yönetim").
 
 C. Behavioral Patterns (Davranışsal Desenler)
-Nesnelerin birbiriyle iletişim kurduğu ve akıllı kararlar verdiği yer.
-7. Strategy (Sınıf: PricingPolicy)
-* Senaryo: Fiyat hesaplama.
-* Sorun: Yaz sezonunda fiyatlar artar, bayramda indirim olur, kışın kampanya vardır. Kodun içine sürekli if (mevsim == yaz) yazmak kodu kirletir ve yönetilemez kılar.
-* Çözüm: Fiyat hesaplama mantığını Strategy deseniyle dışarı aldık. PricingPolicy arayüzü sayesinde, çalışma anında sisteme "Şu an SeasonalDiscount stratejisini kullan" diyebiliyoruz. Algoritmayı tak-çıkar mantığıyla değiştiriyoruz.
+Nesnelerin iletişimini ve kararlarını yönettiğimiz katman.
+
+7. Strategy (Sınıf: behavioral.PricingPolicy)
+
+
+Senaryo: Mevsime göre fiyat hesaplama.
+
+
+Sorun: "Yaz ise fiyatı artır" gibi kodları if-else ile yazmak kodu kirletir ve yönetilemez kılar.
+
+Çözüm: PricingPolicy arayüzü ile hesaplamayı dışarı aldık. Çalışma anında "Şu an SeasonalDiscount stratejisini kullan" diyerek algoritmayı tak-çıkar mantığıyla değiştiriyoruz.
+
 8. Observer (Sınıf: NotificationCenter)
-* Senaryo: Müşteri bilgilendirme (Stok Geldi!).
-* Sorun: Müşteriler sürekli "Araba geldi mi?" diye sisteme sormamalı (Polling). Bu sunucuyu yorar.
-* Çözüm: Observer (Yayıncı-Abone) sistemi kurduk. Müşteriler (Subscriber) sisteme abone olur. Araç geldiğinde NotificationCenter tek bir döngüyle tüm abonelere otomatik mesaj gönderir.
+
+
+Senaryo: Stok geldiğinde müşteriyi bilgilendirme.
+
+
+Sorun: Müşteriler sürekli sisteme "Araç geldi mi?" diye sormamalı (Polling), bu sunucuyu yorar.
+
+Çözüm: Observer sistemi kurduk. Müşteriler abone olur, araç geldiğinde NotificationCenter tek döngüde herkese otomatik mesaj atar.
+
 9. State (Sınıf: VehicleStatus)
-* Senaryo: Aracın müsaitlik durumu.
-* Sorun: Kirada olan bir aracı başkasına kiralayamayız. Veya garajdaki aracı teslim alamayız. Bu kontrolleri if-else ile yapmak yerine nesnenin durumunu değiştirmeliyiz.
-* Çözüm: State deseni ile araca "Müsait" (Available) ve "Kirada" (OnRoad) durumları tanımladık. Araç "Kirada" durumundayken rent() metodu çağrılırsa hata fırlatır. Nesne, içinde bulunduğu duruma göre farklı davranış sergiler.
-________________
 
 
-3. Büyük Resim: Sistem Nasıl Akıyor? (Integration)
-Hocana sistemin bütünlüğünü anlatırken şu akışı kullan:
-1. Hazırlık: SystemConfig (Singleton) veritabanını açar. FleetHub (Factory) aracı üretir.
-2. Kişiselleştirme: Müşteri aracı modifiye eder, FeatureAddon (Decorator) ile GPS ekler.
-3. Hesaplama: PricingPolicy (Strategy) o günün tarifesine göre (Örn: İndirimli) fiyatı hesaplar.
-4. İşlem (The Facade): Burası en kritik nokta. Kullanıcı BookingManager'a (Facade) basar.
-   * İçeride RentalAgreement (Builder) sözleşmeyi hazırlar.
-   * İçeride PaymentGateway (Adapter) ödemeyi tahsil eder.
-5. Sonuç: VehicleStatus (State) aracın durumunu "Kirada"ya çeker. NotificationCenter (Observer) diğer bekleyen müşterilere "Bu araç artık yok" veya benzeri bir bildirim yapabilir.
+Senaryo: Aracın müsaitlik ve kirada olma durumu.
+
+Sorun: Kirada olan aracı tekrar kiralayamayız. Bu kontrolleri if-else ile yapmak yerine nesnenin durumunu değiştirmeliyiz.
+
+Çözüm: State deseni ile "Müsait" ve "Kirada" durumları tanımladık. Araç kiradayken rent() çağrılırsa nesne hata fırlatır.
+
+3. Büyük Resim: Sistem Entegrasyonu (Akış)
+"Son olarak sistemin bütünlüğü şu şekilde sağlanıyor:
+
+
+Hazırlık: SystemConfig veritabanını açar, FleetHub aracı üretir.
+
+
+Kişiselleştirme: Müşteri FeatureAddon (Decorator) ile araca GPS ekler.
+
+
+Hesaplama: PricingPolicy (Strategy) o günün tarifesini uygular.
+
+
+İşlem (Facade): Kullanıcı BookingManager'ı tetikler; içeride RentalAgreement (Builder) sözleşmeyi hazırlar, PaymentGateway (Adapter) ödemeyi alır.
+
+
+Sonuç: VehicleStatus (State) aracı kirada moduna alır ve NotificationCenter (Observer) diğerlerine bildirim geçer."

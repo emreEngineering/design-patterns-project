@@ -2,18 +2,18 @@ package structural;
 
 import core.Rentable;
 
-public class WithGPS extends CarDecorator {
-    public WithGPS(Rentable car) {
+public class WithSunroof extends CarDecorator {
+    public WithSunroof(Rentable car) {
         super(car);
     }
 
     @Override
     public String getDetails() {
-        return super.getDetails() + " + GPS";
+        return super.getDetails() + " + Sunroof";
     }
 
     @Override
     public double getCost() {
-        return super.getCost() + 50;
+        return super.getCost() + 150;
     }
 }
