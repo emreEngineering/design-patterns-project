@@ -70,7 +70,7 @@ public class FleetHub {
         switch (type.toUpperCase()) {
 
             // SUV tipi araç üretimi
-            case "core.SUV":
+            case "SUV":
                 // Range Rover Vogue: Lüks SUV, günlük 3000 TL
                 return new SUV("Range Rover", "Vogue", 3000);
 

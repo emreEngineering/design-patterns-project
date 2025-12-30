@@ -55,7 +55,7 @@ public class WithChauffeur extends CarDecorator {
      */
     @Override
     public String getDetails() {
-        return super.getDetails() + " + Private Chauffeur";
+        return super.getDetails() + " + Özel Şöför";
     }
 
     /**

@@ -31,13 +31,11 @@ package core;
  * 
  * Rentable arayüzünü implemente ederek:
  * - Decorator pattern'de Component rolünü üstlenir
- * - Polimorfik davranış sağlar
  */
 abstract class Vehicle implements Rentable {
 
     /**
      * Araç markası (örn: Mercedes, BMW, Tesla)
-     * protected: Sadece alt sınıflardan erişilebilir
      */
     protected String brand;
 
@@ -48,22 +46,17 @@ abstract class Vehicle implements Rentable {
 
     /**
      * Günlük kiralama ücreti (TL cinsinden)
-     * Bu değer, decorator'lar tarafından artırılabilir
      */
     protected double dailyRate;
 
     /**
      * Araç Constructor (Yapıcı Metot)
-     * 
-     * Alt sınıflar super() ile bu yapıcıyı çağırmalıdır.
-     * Örnek: super("Mercedes", "C200", 1500);
-     * 
      * @param brand     Araç markası
      * @param model     Araç modeli
      * @param dailyRate Günlük kiralama ücreti
      */
     public Vehicle(String brand, String model, double dailyRate) {
-        this.brand = brand; // this: mevcut nesnenin alanına atama
+        this.brand = brand;
         this.model = model;
         this.dailyRate = dailyRate;
     }
@@ -83,7 +76,6 @@ abstract class Vehicle implements Rentable {
 
     /**
      * Günlük kiralama ücretini döndürür
-     * 
      * @return Temel günlük ücret (decorator eklemeleri hariç)
      */
     @Override

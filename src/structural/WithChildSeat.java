@@ -56,7 +56,7 @@ public class WithChildSeat extends CarDecorator {
      */
     @Override
     public String getDetails() {
-        return super.getDetails() + " + Baby Seat";
+        return super.getDetails() + " + Bebek Koltuğu";
     }
 
     /**

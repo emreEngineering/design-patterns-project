@@ -45,7 +45,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // Program başlığını yazdır
-        System.out.println("=== PROFESSIONAL CAR RENTAL SYSTEM (6 PATTERNS) ===\n");
+        System.out.println("===CAR RENTAL SYSTEM (6 PATTERNS) ===\n");
 
         // ═══════════════════════════════════════════════════════════════
         // 1. SINGLETON PATTERN - Sistem Başlatma

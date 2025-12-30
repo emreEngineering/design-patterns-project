@@ -26,32 +26,16 @@ package core;
 
 /**
  * Kiralanabilir nesneler için temel arayüz
- * 
- * Bu arayüz, Liskov Substitution Principle'a uygun olarak tasarlanmıştır:
- * Alt sınıflar (Sedan, SUV, WithGPS vb.) üst sınıf yerine kullanılabilir.
  */
 public interface Rentable {
 
     /**
      * Aracın detay bilgilerini döndürür
-     * 
-     * Decorator pattern'de bu metot zincirleme çağrılır:
-     * Örnek: WithGPS.getDetails() -> WithChildSeat.getDetails() ->
-     * Minivan.getDetails()
-     * Sonuç: "[Van] Volkswagen Transporter (Family Size) + Baby Seat + GPS"
-     * 
-     * @return Araç açıklaması ve eklenen özelliklerin birleşimi
      */
     String getDetails();
 
     /**
      * Aracın günlük kiralama ücretini döndürür
-     * 
-     * Decorator pattern'de her eklenti kendi ücretini ekler:
-     * Örnek: WithGPS.getCost() = tempCar.getCost() + 50
-     * → Temel araç ücreti + GPS ücreti
-     * 
-     * @return Günlük kiralama ücreti (TL cinsinden)
      */
     double getCost();
 }

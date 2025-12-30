@@ -1,23 +1,3 @@
-/**
- * =====================================================================
- *                      ELECTRIC CAR SINIFI
- *                    (Elektrikli Araç Tipi)
- * =====================================================================
- * 
- * ElectricCar, Vehicle sınıfından türeyen somut bir araç tipidir.
- * Çevre dostu, elektrik motorlu araçları temsil eder.
- * 
- * ÖZELLİKLER:
- * - Sıfır emisyon (Eco-Friendly)
- * - Düşük işletme maliyeti
- * - Sessiz sürüş deneyimi
- * - Yüksek tork ve hızlanma
- * 
- * ÖRNEK ARAÇLAR: Tesla Model S, BMW i4, Mercedes EQS
- * 
- * @author Emre
- * @version 1.0
- */
 package core;
 
 /**
@@ -47,8 +27,6 @@ public class ElectricCar extends Vehicle {
      * 
      * EV (Electric Vehicle) etiketi ve "Eco-Friendly" özelliği eklenir.
      * Bu, aracın çevre dostu olduğunu vurgular.
-     * 
-     * @return "[EV] marka model (Eco-Friendly)" formatında string
      */
     @Override
     public String getDetails() {

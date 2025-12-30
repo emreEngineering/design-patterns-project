@@ -57,7 +57,7 @@ public class WithWinterTires extends CarDecorator {
      */
     @Override
     public String getDetails() {
-        return super.getDetails() + " + Winter Tires";
+        return super.getDetails() + " + Kış Lastikleri";
     }
 
     /**

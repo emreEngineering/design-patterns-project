@@ -51,8 +51,6 @@ public class SystemConfig {
 
     /**
      * Private Constructor (Özel Yapıcı)
-     * 
-     * private olduğu için dışarıdan new SystemConfig() yapılamaz!
      * Bu, birden fazla nesne oluşturulmasını engeller.
      * 
      * Sadece getInstance() metodu içinden çağrılabilir.
@@ -90,11 +88,6 @@ public class SystemConfig {
      * 
      * Bu metot, singleton nesne üzerinden çağrılır:
      * SystemConfig.getInstance().connectDB();
-     * 
-     * Gerçek uygulamada burada:
-     * - JDBC bağlantısı açılır
-     * - Connection pool oluşturulur
-     * - Veritabanı şeması kontrol edilir
      */
     public void connectDB() {
         System.out.println("[Singleton] Veritabanına Bağlandı (PostgreSQL)..");

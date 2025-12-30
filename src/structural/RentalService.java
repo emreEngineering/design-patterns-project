@@ -125,7 +125,7 @@ public class RentalService {
         //
         NotificationSystem notif = new NotificationSystem(); // Bildirim sistemi oluştur
         notif.subscribe(new Customer(customerName)); // Müşteriyi abone yap
-        notif.sendAll("Your car is ready at the gate. Enjoy your ride!"); // Bildirim gönder
+        notif.sendAll("Aracınız kapıda hazır. İyi yolculuklar!"); // Bildirim gönder
 
         // Facade işlem bitişi
         System.out.println("--- [Facade] Process Completed ---\n");
