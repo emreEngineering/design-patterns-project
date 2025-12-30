@@ -1,0 +1,296 @@
+================================================================================
+           ARAÇ KİRALAMA SİSTEMİNDE KULLANILAN TASARIM DESENLERİ
+                    (Sorun ve Çözüm Yaklaşımıyla)
+================================================================================
+
+Bu projede 6 farklı tasarım deseni uygulanmıştır. Her desen, belirli bir 
+yazılım problemini çözmek için kullanılmıştır. Aşağıda her desenin hangi 
+sorunu çözdüğü ve nasıl çözüm sağladığı açıklanmaktadır.
+
+
+================================================================================
+1. SINGLETON PATTERN (Tekil Desen)
+================================================================================
+
+📋 SORUN:
+--------
+Araç kiralama sisteminde veritabanı bağlantısı ve sistem ayarları tüm 
+uygulama boyunca tek bir noktadan yönetilmelidir. Eğer her sınıf kendi 
+veritabanı bağlantısını oluşturursa:
+  - Kaynak israfı yaşanır (birden fazla bağlantı)
+  - Ayarlar tutarsız olabilir
+  - Bağlantı yönetimi zorlaşır
+
+Örnek Problem:
+  class RentalService { Database db = new Database(); }
+  class ReportService { Database db = new Database(); }
+  // İki farklı bağlantı! Senkronizasyon sorunu!
+
+✅ ÇÖZÜM:
+---------
+Singleton Pattern ile SystemConfig sınıfı oluşturuldu. Bu sınıftan sadece 
+BİR TANE nesne oluşturulabilir ve tüm sistem bu tek nesneyi kullanır.
+
+Uygulama (SystemConfig.java):
+  - private static instance: Tek nesneyi tutar
+  - private constructor: Dışarıdan new ile nesne oluşturulamaz
+  - public static getInstance(): Tek erişim noktası
+
+Kullanım:
+  SystemConfig.getInstance().connectDB();  // Her yerden aynı nesne
+
+Kazanımlar:
+  ✓ Tek veritabanı bağlantısı
+  ✓ Merkezi konfigürasyon yönetimi
+  ✓ Kaynak tasarrufu
+
+
+================================================================================
+2. FACTORY METHOD PATTERN (Fabrika Metodu Deseni)
+================================================================================
+
+📋 SORUN:
+--------
+Sistemde farklı araç tipleri vardır: Sedan, SUV, SportsCar, Minivan, 
+ElectricCar. Eğer istemci kodu her araç tipini doğrudan oluşturursa:
+  - İstemci tüm somut sınıfları bilmek zorunda kalır
+  - Yeni araç tipi eklemek için birçok yerde kod değişikliği gerekir
+  - Araç oluşturma mantığı dağınık hale gelir
+
+Örnek Problem:
+  if (type == "SEDAN") { car = new Sedan("Mercedes", "C200", 1500); }
+  else if (type == "SUV") { car = new SUV("Range Rover", "Vogue", 3000); }
+  // Her yerde aynı if-else! Yeni tip eklemek çok zor!
+
+✅ ÇÖZÜM:
+---------
+Factory Pattern ile FleetHub (Araç Filosu Merkezi) sınıfı oluşturuldu. 
+İstemci sadece tip adını söyler, fabrika uygun aracı üretir.
+
+Uygulama (FleetHub.java):
+  - createVehicle(String type): Tipe göre araç üretir
+  - switch-case ile merkezi üretim kontrolü
+  - Varsayılan tip desteği (bilinmeyen tip için güvenli seçenek)
+
+Kullanım:
+  FleetHub factory = new FleetHub();
+  Rentable car = factory.createVehicle("SPORT");  // Ferrari 488 Spider döner
+
+Kazanımlar:
+  ✓ İstemci somut sınıfları bilmek zorunda değil
+  ✓ Yeni araç tipi eklemek için sadece fabrikaya case eklenir
+  ✓ Merkezi araç oluşturma kontrolü
+
+
+================================================================================
+3. DECORATOR PATTERN (Süsleyici Desen)
+================================================================================
+
+📋 SORUN:
+--------
+Araçlara opsiyonel özellikler eklenmesi gerekiyor: GPS, bebek koltuğu, 
+kış lastiği, şoför, sunroof. Eğer kalıtım kullanılırsa:
+  - Her kombinasyon için yeni sınıf gerekir (sınıf patlaması!)
+  - SedanWithGPS, SedanWithGPSAndChildSeat, SedanWithGPSAndSunroof...
+  - Yönetilemez sayıda sınıf oluşur
+
+Örnek Problem:
+  class SedanWithGPS extends Sedan { }
+  class SedanWithGPSAndChildSeat extends Sedan { }
+  class SedanWithGPSAndChildSeatAndWinterTires extends Sedan { }
+  // 5 araç x 5 özellik = 25+ kombinasyon! Yönetilemez!
+
+✅ ÇÖZÜM:
+---------
+Decorator Pattern ile araçlara dinamik olarak özellik ekleme sağlandı. 
+Her özellik bir "sarmalayıcı" (wrapper) sınıftır.
+
+Uygulama:
+  - CarDecorator (abstract): Tüm dekoratörlerin temel sınıfı
+  - WithGPS, WithChildSeat, WithChauffeur, WithWinterTires, WithSunroof
+
+Kullanım:
+  Rentable car = factory.createVehicle("FAMILY");  // Minivan: 1200 TL
+  car = new WithChildSeat(car);   // + Bebek Koltuğu: +100 TL
+  car = new WithWinterTires(car); // + Kış Lastiği: +80 TL
+  // Sonuç: 1380 TL/gün, istenen kombinasyon dinamik olarak oluşturuldu!
+
+Kazanımlar:
+  ✓ Az sayıda sınıf ile sınırsız kombinasyon
+  ✓ Çalışma zamanında dinamik özellik ekleme
+  ✓ Open/Closed Principle: Yeni özellik için mevcut kod değişmez
+
+
+================================================================================
+4. STRATEGY PATTERN (Strateji Deseni)
+================================================================================
+
+📋 SORUN:
+--------
+Farklı müşteri tiplerine farklı indirimler uygulanması gerekiyor:
+  - VIP müşteriler: %30 kurumsal indirim
+  - Tatil dönemi: %20 sezonluk indirim
+  - Normal müşteriler: İndirim yok
+
+Eğer if-else ile yapılırsa:
+  - Her yeni indirim tipi için kodda değişiklik
+  - İç içe if-else karmaşası
+  - Test edilmesi zor bir yapı
+
+Örnek Problem:
+  if (customer == "VIP") { price = price * 0.7; }
+  else if (customer == "HOLIDAY") { price = price * 0.8; }
+  else { price = price; }
+  // Her yeni indirim için if-else artıyor!
+
+✅ ÇÖZÜM:
+---------
+Strategy Pattern ile her indirim türü ayrı bir strateji sınıfı olarak 
+tanımlandı. Strateji çalışma zamanında değiştirilebilir.
+
+Uygulama:
+  - PricingPolicy (interface): calculate(price) metodu
+  - VipDiscount: %30 indirim uygular
+  - HolidayDiscount: %20 indirim uygular
+  - NormalPrice: İndirim uygulamaz
+
+Kullanım:
+  PricingPolicy policy;
+  if (type == "VIP") { policy = new VipDiscount(); }
+  double finalPrice = policy.calculate(basePrice);
+
+Kazanımlar:
+  ✓ Her algoritma kendi sınıfında izole
+  ✓ Yeni indirim eklemek için sadece yeni sınıf oluştur
+  ✓ Algoritma çalışma zamanında değiştirilebilir
+
+
+================================================================================
+5. OBSERVER PATTERN (Gözlemci Deseni)
+================================================================================
+
+📋 SORUN:
+--------
+Kiralama işlemi tamamlandığında müşteriye bildirim gönderilmesi gerekiyor.
+Gelecekte farklı bildirim kanalları eklenebilir: SMS, E-posta, Push 
+notification. Eğer doğrudan kod yazılırsa:
+  - Her yeni kanal için mevcut kod değişmeli
+  - Bildirim mantığı kiralama koduyla iç içe geçer
+  - Bağımlılıklar artar
+
+Örnek Problem:
+  // RentalService içinde:
+  sendSMS(customer, "Aracınız hazır");
+  sendEmail(customer, "Aracınız hazır");
+  sendPush(customer, "Aracınız hazır");
+  // Her yeni kanal için RentalService değişmeli!
+
+✅ ÇÖZÜM:
+---------
+Observer Pattern ile "Yayıncı-Abone" modeli uygulandı. NotificationSystem 
+yayıncı, Customer ise abone rolünde.
+
+Uygulama:
+  - Subscriber (interface): notifyUser(msg) metodu
+  - Customer: Subscriber'ı implement eden somut abone
+  - NotificationSystem: Abone listesini yönetir, herkese bildirim gönderir
+
+Kullanım:
+  NotificationSystem notif = new NotificationSystem();
+  notif.subscribe(new Customer("Ali Baba"));
+  notif.sendAll("Aracınız kapıda hazır!");
+  // Tüm abonelere otomatik bildirim!
+
+Kazanımlar:
+  ✓ Gevşek bağlılık (yayıncı abonelerin detayını bilmez)
+  ✓ Yeni abone tipi eklemek kolay (EmailSubscriber, PushSubscriber)
+  ✓ Bir-çok ilişkisi yönetimi
+
+
+================================================================================
+6. FACADE PATTERN (Cephe Deseni)
+================================================================================
+
+📋 SORUN:
+--------
+Bir kiralama işlemi birçok alt sistemi içerir:
+  - Strateji seçimi (fiyatlandırma)
+  - Maliyet hesaplama
+  - Fatura kesme
+  - Müşteri bildirimi
+
+İstemci kodun tüm bu alt sistemleri bilmesi ve koordine etmesi gerekirse:
+  - Karmaşık ve hataya açık kod
+  - Alt sistemlerdeki değişiklikler istemciyi etkiler
+  - Kod tekrarı
+
+Örnek Problem:
+  // Main sınıfında:
+  PricingPolicy policy = new VipDiscount();
+  double cost = policy.calculate(car.getCost()) * days;
+  System.out.println("Fatura: " + cost);
+  NotificationSystem notif = new NotificationSystem();
+  notif.subscribe(new Customer(name));
+  notif.sendAll("Aracınız hazır!");
+  // Çok fazla detay! Her kiralama için tekrar!
+
+✅ ÇÖZÜM:
+---------
+Facade Pattern ile RentalService sınıfı oluşturuldu. Tüm karmaşık işlemler 
+tek bir basit metot arkasında gizlendi.
+
+Uygulama (RentalService.java):
+  - processRental(customer, car, days, type): Tek çağrı ile tüm işlemler
+  - İçeride: Strategy seçimi + Hesaplama + Fatura + Observer bildirimi
+
+Kullanım:
+  RentalService service = new RentalService();
+  service.processRental("Ali Baba", familyCar, 7, "HOLIDAY");
+  // Tek satır! Tüm karmaşıklık gizli!
+
+Kazanımlar:
+  ✓ Basit arayüz (tek metot çağrısı)
+  ✓ Alt sistem değişiklikleri istemciyi etkilemez
+  ✓ Kod organizasyonu ve okunabilirlik
+
+
+================================================================================
+                              ÖZET TABLO
+================================================================================
+
++------------------+--------------------------------+--------------------------------+
+|     DESEN        |           SORUN                |           ÇÖZÜM                |
++------------------+--------------------------------+--------------------------------+
+| Singleton        | Birden fazla DB bağlantısı     | Tek global nesne garantisi     |
+| Factory Method   | Somut sınıf bağımlılığı        | Merkezi üretim fabrikası       |
+| Decorator        | Sınıf patlaması (kombinasyon)  | Dinamik sarmalama              |
+| Strategy         | if-else karmaşası              | Değiştirilebilir algoritmalar  |
+| Observer         | Sıkı bağlı bildirimler         | Yayıncı-Abone modeli           |
+| Facade           | Karmaşık alt sistem erişimi    | Basit birleşik arayüz          |
++------------------+--------------------------------+--------------------------------+
+
+
+================================================================================
+                         DESENLER ARASI ETKİLEŞİM
+================================================================================
+
+Bu projede desenler birlikte çalışarak güçlü bir mimari oluşturur:
+
+1. Ana Akış:
+   Main → FleetHub (Factory) → Vehicle oluşturulur
+                ↓
+   Vehicle → CarDecorator (Decorator) → Özellikler eklenir
+                ↓
+   RentalService (Facade) → Kiralama işlemi başlar
+                ↓
+   PricingPolicy (Strategy) → İndirim stratejisi seçilir
+                ↓
+   NotificationSystem (Observer) → Müşteriye bildirim gönderilir
+
+2. SystemConfig (Singleton) tüm bu akış boyunca tek bir konfigürasyon 
+   noktası olarak hizmet verir.
+
+================================================================================
+                           Hazırlayan: Emre
+                           Versiyon: 1.0
+================================================================================
