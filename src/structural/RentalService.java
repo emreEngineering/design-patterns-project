@@ -70,7 +70,7 @@ public class RentalService {
      */
     public void processRental(String customerName, Rentable car, int days, String typeOfCustomer) {
         // Facade işlem başlangıcı
-        System.out.println("\n--- [Facade] Rental Process Starting for: " + customerName + " ---");
+        System.out.println("\n--- [Facade] Kiralama İşlemi Başlatılıyor: " + customerName + " ---");
 
         // ═══════════════════════════════════════════════════════════════
         // ADIM 1: STRATEGY PATTERN - Fiyat Stratejisini Seç
@@ -109,9 +109,9 @@ public class RentalService {
         // car.getDetails(): Decorator zincirinden tüm özellikler gelir
         // Örnek: "[Van] VW Transporter (Family Size) + Baby Seat + Winter Tires"
         //
-        System.out.println("core.Vehicle: " + car.getDetails()); // Araç detayları
-        System.out.println("Days: " + days); // Kiralama süresi
-        System.out.println("Total Cost: " + totalCost + " TL"); // Toplam tutar
+        System.out.println("Araç: " + car.getDetails()); // Araç detayları
+        System.out.println("Gün: " + days); // Kiralama süresi
+        System.out.println("Toplam Tutar: " + totalCost + " TL"); // Toplam tutar
 
         // ═══════════════════════════════════════════════════════════════
         // ADIM 4: OBSERVER PATTERN - Müşteriyi Bilgilendir
@@ -128,6 +128,6 @@ public class RentalService {
         notif.sendAll("Aracınız kapıda hazır. İyi yolculuklar!"); // Bildirim gönder
 
         // Facade işlem bitişi
-        System.out.println("--- [Facade] Process Completed ---\n");
+        System.out.println("--- [Facade] İşlem Tamamlandı ---\n");
     }
 }

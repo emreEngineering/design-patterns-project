@@ -24,6 +24,6 @@ public class SUV extends Vehicle {
      */
     @Override
     public String getDetails() {
-        return "[SUV] " + super.getDetails() + " (Off-Road)";
+        return "[SUV] " + super.getDetails() + " (Arazi)";
     }
 }

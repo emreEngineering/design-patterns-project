@@ -30,6 +30,6 @@ public class ElectricCar extends Vehicle {
      */
     @Override
     public String getDetails() {
-        return "[EV] " + super.getDetails() + " (Eco-Friendly)";
+        return "[EV] " + super.getDetails() + " (Çevre Dostu)";
     }
 }

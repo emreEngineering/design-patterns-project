@@ -53,7 +53,7 @@ public class WithSunroof extends CarDecorator {
      */
     @Override
     public String getDetails() {
-        return super.getDetails() + " + Sunroof";
+        return super.getDetails() + " + Açılır Tavan";
     }
 
     /**

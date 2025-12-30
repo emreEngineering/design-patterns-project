@@ -27,6 +27,6 @@ public class Minivan extends Vehicle {
      */
     @Override
     public String getDetails() {
-        return "[Van] " + super.getDetails() + " (Family Size)";
+        return "[Van] " + super.getDetails() + " (Aile Boyu)";
     }
 }

@@ -24,6 +24,6 @@ public class SportsCar extends Vehicle {
      */
     @Override
     public String getDetails() {
-        return "[Sport] " + super.getDetails() + " (High Performance)";
+        return "[Sport] " + super.getDetails() + " (Yüksek Performans)";
     }
 }

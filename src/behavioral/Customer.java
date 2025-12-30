@@ -63,6 +63,6 @@ public class Customer implements Subscriber {
     public void notifyUser(String msg) {
         // Konsola SMS simülasyonu yazdır
         // Gerçek uygulamada: smsClient.send(phoneNumber, msg);
-        System.out.println("[Observer] SMS to " + name + ": " + msg);
+        System.out.println("[Observer] SMS Gönderildi - " + name + ": " + msg);
     }
 }

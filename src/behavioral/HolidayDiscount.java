@@ -44,7 +44,7 @@ public class HolidayDiscount implements PricingPolicy {
      */
     public double calculate(double price) {
         // Konsola indirim bilgisi yazdır
-        System.out.println("[Strategy] Holiday Discount applied (-20%)");
+        System.out.println("[Strateji] Tatil İndirimi uygulandı (-%20)");
 
         // %20 indirim: fiyat × 0.8
         // (1 - 0.20 = 0.80 = %80'ini öde)

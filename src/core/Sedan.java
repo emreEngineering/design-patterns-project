@@ -24,6 +24,6 @@ public class Sedan extends Vehicle {
      */
     @Override
     public String getDetails() {
-        return "[Sedan] " + super.getDetails() + " (Comfort)";
+        return "[Sedan] " + super.getDetails() + " (Konfor)";
     }
 }

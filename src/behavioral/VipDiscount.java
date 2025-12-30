@@ -43,7 +43,7 @@ public class VipDiscount implements PricingPolicy {
      */
     public double calculate(double price) {
         // Konsola indirim bilgisi yazdır
-        System.out.println("[Strategy] VIP Corporate Discount applied (-30%)");
+        System.out.println("[Strateji] VIP Kurumsal İndirim uygulandı (-%30)");
 
         // %30 indirim: fiyat × 0.7
         // (1 - 0.30 = 0.70 = %70'ini öde)
