@@ -75,13 +75,6 @@ public class NotificationSystem {
         users.add(user); // Listeye ekle
     }
 
-    /**
-     * Not: Gerçek uygulamada genellikle şu metodlar da bulunur:
-     * 
-     * public void unsubscribe(Subscriber user) {
-     * users.remove(user); // Listeden çıkar
-     * }
-     */
 
     /**
      * Tüm abonelere bildirim gönder

@@ -40,11 +40,6 @@ package creational;
 public class SystemConfig {
 
     /**
-     * Tek nesneyi tutan static değişken
-     * 
-     * static: Sınıfa ait, nesneye değil
-     * private: Dışarıdan doğrudan erişilemez
-     * 
      * İlk başta null, getInstance() çağrılınca oluşturulur (Lazy Initialization)
      */
     private static SystemConfig instance;
@@ -63,12 +58,6 @@ public class SystemConfig {
     /**
      * Singleton nesnesine erişim metodu
      * 
-     * Bu metot, tek erişim noktasıdır (Global Access Point).
-     * 
-     * LAZY INITIALIZATION (Tembel Başlatma):
-     * - Nesne ilk çağrıda oluşturulur
-     * - Sonraki çağrılarda aynı nesne döner
-     * 
      * ÇALIŞMA MANTIGI:
      * 1. İlk çağrı: instance == null → Yeni nesne oluştur
      * 2. Sonraki çağrılar: instance != null → Mevcut nesneyi döndür
@@ -85,9 +74,6 @@ public class SystemConfig {
 
     /**
      * Veritabanı bağlantısını başlatır
-     * 
-     * Bu metot, singleton nesne üzerinden çağrılır:
-     * SystemConfig.getInstance().connectDB();
      */
     public void connectDB() {
         System.out.println("[Singleton] Veritabanına Bağlandı (PostgreSQL)..");

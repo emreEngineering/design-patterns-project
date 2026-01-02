@@ -57,11 +57,7 @@ public class FleetHub {
      * 1. İstemci "new Sedan()" demez, "SEDAN" der
      * 2. Marka, model ve fiyat fabrika tarafından belirlenir
      * 3. Gelecekte yeni tipler kolayca eklenebilir
-     * 
-     * SWITCH-CASE YAPISI:
-     * - Her case bir araç tipini temsil eder
-     * - default: Bilinmeyen tip için güvenli varsayılan
-     * 
+     *
      * @param type Araç tipi (SUV, SEDAN, SPORT, FAMILY, ELECTRIC)
      * @return Oluşturulan Rentable araç nesnesi
      */

@@ -60,18 +60,6 @@ import core.Rentable; // Ortak arayüz
 abstract class
 CarDecorator implements Rentable {
 
-    /**
-     * Sarmalanan (wrapped) araç referansı
-     * 
-     * protected: Alt sınıflardan (WithGPS, WithChildSeat) erişilebilir
-     * 
-     * Bu değişken şunları tutabilir:
-     * - Temel bir araç (Sedan, SUV, Minivan)
-     * - Başka bir dekoratör (WithGPS, WithChildSeat)
-     * 
-     * "temp" (temporary değil): Template pattern'de kullanılan geleneksel
-     * isimlendirme
-     */
     protected Rentable tempCar;
 
     /**
@@ -88,10 +76,6 @@ CarDecorator implements Rentable {
 
     /**
      * Sarmalanan aracın detaylarını döndürür
-     * 
-     * Bu varsayılan implementasyon, sarmalanan aracın detayını döndürür.
-     * Alt sınıflar bu metodu override ederek kendi eklentilerini ekler.
-     * 
      * Örnek:
      * - CarDecorator.getDetails() → "Mercedes C200"
      * - WithGPS.getDetails() → super.getDetails() + " + GPS" → "Mercedes C200 +
@@ -106,10 +90,6 @@ CarDecorator implements Rentable {
 
     /**
      * Sarmalanan aracın ücretini döndürür
-     * 
-     * Bu varsayılan implementasyon, sarmalanan aracın ücretini döndürür.
-     * Alt sınıflar bu metodu override ederek kendi ücretlerini ekler.
-     * 
      * Örnek:
      * - CarDecorator.getCost() → 1500
      * - WithGPS.getCost() → super.getCost() + 50 → 1550
